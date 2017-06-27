@@ -4,4 +4,6 @@ picamera
 flask
 RPi.GPIO
 smbus
+TwitterAPI
+google-api-python-client
 
