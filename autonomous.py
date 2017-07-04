@@ -18,7 +18,7 @@ def autodrive(dur):
 
 	mode = FORWARD
 
-	wheels.forward(-150)
+	wheels.forward(150)
 
 	
 	while(time.time() < end_time):
@@ -35,21 +35,21 @@ def autodrive(dur):
                                 wheels.stop()
 				if (ldist < rdist):
 					mode=RIGHT
-					wheels.backward(-100)
+					wheels.backward(50)
 					time.sleep(1)
-					wheels.right(-250)
+					wheels.right(50)
 					time.sleep(1)
 				else:
 					mode=LEFT
-					wheels.backward(-100)
+					wheels.backward(50)
 					time.sleep(1)
-					wheels.left(-250)
+					wheels.left(50)
 					time.sleep(1)
 					
 		if (mode==LEFT or mode==RIGHT):
 			if (cdist > 50):
 				mode=FORWARD
-				wheels.forward(-150)
+				wheels.forward(150)
 				
 			
 			
@@ -58,4 +58,4 @@ def autodrive(dur):
 
 	
 if (__name__ == '__main__'):
-	autodrive(10)
+	autodrive(30)

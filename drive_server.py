@@ -32,12 +32,12 @@ def shake():
 
 @app.route('/left')
 def left():
-	wheels.left(200, 3)
+	wheels.left(200, .3)
 	return ''
         
 @app.route('/right')
 def right():
-	wheels.right(200, 3)
+	wheels.right(200, .3)
 	return ''
         
 @app.route('/f')
