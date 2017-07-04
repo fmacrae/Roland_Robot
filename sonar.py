@@ -125,7 +125,6 @@ def cdist():
 
 
 if __name__ == "__main__":
-    TRIG = int(sys.argv[1])
-    
-    ECHO = int(sys.argv[2])
-    raw_distance(TRIG, ECHO)
+   print "Left:",ldist(),"cm" 
+   print "Cent:",cdist(),"cm"
+   print "Right:",rdist(),"cm"
