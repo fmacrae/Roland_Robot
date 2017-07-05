@@ -215,7 +215,14 @@ https://github.com/lukas/robot/issues/6
 - Update Notification_Settings.csv with your Twitter API OAuth settings, 
 Siraj has a good guide on how to set it up here https://www.youtube.com/watch?v=o_OZdbCzHUA 
 - Also create a Gmail API OAuth token called client_secret.json using instructions here https://developers.google.com/gmail/api/quickstart/python
-- Drop the file into your Roland_Robot directory.
-
+- Run the Notification_Test.py which will hopefully Tweet then ask for your permission via a browser to send email.
+- If you cannot do this due to running via SSH or similar then install the dependancies and run the Notification_Test.py on your desktop which creates a special json file in your home directory in a hidden subfolder called .credentials
+- sftp the file to your Pi 
+```
+sftp pi@yourpisaddress
+lcd ~/.credentials
+cd /home/pi/.credentials
+put gmail-python-email-send.json
+```
 
 
