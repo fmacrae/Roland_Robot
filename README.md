@@ -88,6 +88,8 @@ Install dependencies
 
 ```
 sudo pip install -r requirements.txt
+sudo apt-get install flite
+
 ```
 
 At this point you should be able to drive your robot locally, try:
@@ -165,9 +167,9 @@ Last command took an age... run it and go out or run it just before bed so it ca
 It also doesn’t install tensorflow, just the python interfaces or at least didn’t get a proper tensorflow directory with any of the stuff we need….
  
 I found running the steps from:
-https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/makefile#raspberry-pi
-https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/pi_examples
-Install and compile tensorflow correctly for the Pi.  Takes around 3hrs to do
+- https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/makefile#raspberry-pi
+- https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/pi_examples
+- Install and compile tensorflow correctly for the Pi.  Takes around 3hrs to do
  
 
 Now create a symbolic link for the labels in your tensorflow directory to the pi_examples label_image directory
@@ -195,9 +197,9 @@ python inception_server.py &
 think second one is to d/l the files needed to tmp
  
 Then on localhost:
-port 9999 for inception  http://localhost:9999
-port 8000 for drive http://localhost:8000
-/cam.jpg to see what it sees  http://localhost/cam.jpg
+- port 9999 for inception  http://localhost:9999
+- port 8000 for drive http://localhost:8000
+- /cam.jpg to see what it sees  http://localhost/cam.jpg
  
 I have an issue with drive as it tries to show the picture and fails as its appending ?T=1242341…
  
@@ -206,6 +208,13 @@ Not sure how to resolve and lukas has an issue open for it.
 https://github.com/lukas/robot/issues/6
  
  
+
+#### notification
+
+- Update Notification_Settings.csv with your Twitter API OAuth settings, 
+Siraj has a good guide on how to set it up here https://www.youtube.com/watch?v=o_OZdbCzHUA 
+- Also create a Gmail API OAuth token called client_secret.json using instructions here https://developers.google.com/gmail/api/quickstart/python
+- Drop the file into your Roland_Robot directory.
 
 
 
