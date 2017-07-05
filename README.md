@@ -172,8 +172,9 @@ Install and compile tensorflow correctly for the Pi.  Takes around 3hrs to do
 
 Now create a symbolic link for the labels in your tensorflow directory to the pi_examples label_image directory
 
+```
 pi@raspberrypi:~/tensorflow $ ln -s tensorflow/contrib/pi_examples/label_image/gen/bin/label_image label_image
-
+```
 
 
 Next start a tensorflow service that loads up an inception model and does object recognition the the inception model
@@ -187,8 +188,10 @@ sudo systemctl start inception
 
 
 Once everything is installed and ready you can get the robot running using:
+```
 sudo sh server.sh &
 python inception_server.py &
+```
 think second one is to d/l the files needed to tmp
  
 Then on localhost:
@@ -203,6 +206,6 @@ Not sure how to resolve and lukas has an issue open for it.
 https://github.com/lukas/robot/issues/6
  
  
-```
+
 
 
