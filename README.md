@@ -169,7 +169,8 @@ It also doesn’t install tensorflow, just the python interfaces or at least did
 I found running the steps from:
 - https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/makefile#raspberry-pi
 - https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/pi_examples
-- Install and compile tensorflow correctly for the Pi.  Takes around 3hrs to do
+
+Install and compile tensorflow correctly for the Pi.  Takes around 3hrs to do
  
 
 Now create a symbolic link for the labels in your tensorflow directory to the pi_examples label_image directory
