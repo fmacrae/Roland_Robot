@@ -47,29 +47,29 @@ if (cmd == 'forward'):
 	wheels.forward(200, 1)
 
 elif (cmd == 'backward'):
-	wheels.backward(200, 1)
+	wheels.backward(150, 1)
 
 elif (cmd == 'left'):
-	wheels.left(200, 1)
+	wheels.left(-150, 0.3)
 
 elif (cmd == 'right'):
-	wheels.right(200, 1)
+	wheels.right(-150, .3)
 
 elif (cmd == 'wheel1'):
-	wheels.spinMotor(1, 200, 1)
+	wheels.spinMotor(1, 50, 1)
 
 elif (cmd == 'wheel2'):
-	wheels.spinMotor(2, 200, 1)
+	wheels.spinMotor(2, 50, 1)
 
 elif (cmd == 'wheel3'):
-	wheels.spinMotor(3, 200, 1)
+	wheels.spinMotor(3, 50, 1)
 
 elif (cmd == 'wheel4'):
-	wheels.spinMotor(4, 200, 1)
+	wheels.spinMotor(4, 50, 1)
 
 elif (cmd == 'shake'):
-	wheels.left(200, 0.2)
-	wheels.right(200, 0.2)
+	wheels.left(50, 0.2)
+	wheels.right(50, 0.2)
 
 elif (cmd == 'leftdist'):
 	print sonar.ldist()

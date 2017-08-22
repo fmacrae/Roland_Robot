@@ -1,8 +1,6 @@
-# robot
+# Roland_Robot
 
-This will run a simple robot with a webserver on a raspberry PI with the Adafruit Motor Hat.  I wrote this up for myself for fun and to help me remember how I set things up.
-
-High level overview can be found in this article: https://www.oreilly.com/learning/how-to-build-a-robot-that-sees-with-100-and-tensorflow
+This will run a simple robot with a webserver on a raspberry PI with the Adafruit Motor Hat.  This is a development off of Lukas' great work on his robot.  Core things we are adding is mapping capability, notification APIs and imporved self driving.
 
 ## Hardware
 
@@ -25,12 +23,13 @@ To get started, you should be able to make the robot work without the arm, sonar
 - arm.py tests a servo controlled robot arm
 - autonomous.py implements a simple driving algorithm using the wheels and sonal
 - inception_server.py runs an image classifying microservice
+- Notification_Test.py tests the Twitter and Gmail integration.
 
 ## Example Robots
 
-Here are two robots I made that use this software
+Here is the robot I made that uses this software
 
-![Robots](https://joyfulgrit.files.wordpress.com/2013/10/img_0183.jpg?w=700)
+![Robots](https://s3.amazonaws.com/websofttechnology/roland.jpg)
 
 ## Wiring The Robot
 ### Sonar
@@ -81,14 +80,16 @@ Install this code
 
 ```
 sudo apt-get install git
-git clone https://github.com/lukas/robot.git
-cd robot
+git clone https://github.com/fmacrae/Roland_Robot.git
+cd Roland_Robot
 ```
 
 Install dependencies
 
 ```
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
+sudo apt-get install flite
+
 ```
 
 At this point you should be able to drive your robot locally, try:
@@ -161,6 +162,24 @@ wget https://github.com/samjabrahams/tensorflow-on-raspberry-pi/releases/downloa
 sudo pip install tensorflow-0.11.0-cp27-none-linux_armv7l.whl
 ```
 
+Last command took an age... run it and go out or run it just before bed so it can go overnight
+ 
+It also doesn’t install tensorflow, just the python interfaces or at least didn’t get a proper tensorflow directory with any of the stuff we need….
+ 
+I found running the steps from:
+- https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/makefile#raspberry-pi
+- https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/pi_examples
+
+Install and compile tensorflow correctly for the Pi.  Takes around 3hrs to do
+ 
+
+Now create a symbolic link for the labels in your tensorflow directory to the pi_examples label_image directory
+
+```
+pi@raspberrypi:~/tensorflow $ ln -s tensorflow/contrib/pi_examples/label_image/gen/bin/label_image label_image
+```
+
+
 Next start a tensorflow service that loads up an inception model and does object recognition the the inception model
 
 ```
@@ -171,6 +190,39 @@ sudo systemctl start inception
 ```
 
 
+Once everything is installed and ready you can get the robot running using:
+```
+sudo sh server.sh &
+python inception_server.py &
+```
+think second one is to d/l the files needed to tmp
+ 
+Then on localhost:
+- port 9999 for inception  http://localhost:9999
+- port 8000 for drive http://localhost:8000
+- /cam.jpg to see what it sees  http://localhost/cam.jpg
+ 
+I have an issue with drive as it tries to show the picture and fails as its appending ?T=1242341…
+ 
+Not sure how to resolve and lukas has an issue open for it.
+ 
+https://github.com/lukas/robot/issues/6
+ 
+ 
 
+#### notification
+
+- Update Notification_Settings.csv with your Twitter API OAuth settings, 
+Siraj has a good guide on how to set it up here https://www.youtube.com/watch?v=o_OZdbCzHUA 
+- Also create a Gmail API OAuth token called client_secret.json using instructions here https://developers.google.com/gmail/api/quickstart/python
+- Run the Notification_Test.py which will hopefully Tweet then ask for your permission via a browser to send email.
+- If you cannot do this due to running via SSH or similar then install the dependancies and run the Notification_Test.py on your desktop which creates a special json file in your home directory in a hidden subfolder called .credentials
+- sftp the file to your Pi 
+```
+sftp pi@yourpisaddress
+lcd ~/.credentials
+cd /home/pi/.credentials
+put gmail-python-email-send.json
+```
 
 

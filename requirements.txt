@@ -6,4 +6,4 @@ RPi.GPIO
 smbus
 TwitterAPI
 google-api-python-client
-
+tweepy

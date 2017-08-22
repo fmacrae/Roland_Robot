@@ -7,7 +7,7 @@ After=network.target
 [Service]
 User=pi
 Group=www-data
-WorkingDirectory=/home/pi/robot
+WorkingDirectory=/home/pi/Roland_Robot
 ExecStart=/usr/bin/gunicorn --workers 3 --bind unix:/home/pi/drive.sock drive_server:app
 
 [Install]

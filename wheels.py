@@ -27,7 +27,7 @@ mFR = mh.getMotor(4)
 
 def wakeup(m):
         # set the speed to start, from 0 (off) to 255 (max speed)
-        m.setSpeed(150)
+        m.setSpeed(50)
         m.run(Adafruit_MotorHAT.FORWARD);
         # turn on motor
         m.run(Adafruit_MotorHAT.RELEASE);        
@@ -48,7 +48,7 @@ def spin(wheel, speed):
 	else:
 		wheel.run(Adafruit_MotorHAT.RELEASE)
 
-def spinMotor(motorId=1, speed=200, dur=-1):
+def spinMotor(motorId=1, speed=50, dur=-1):
 	m = mh.getMotor(motorId)
 	spin(m, speed)
 	if (dur >= 0):
@@ -63,7 +63,7 @@ def stop():
 	mBR.run(Adafruit_MotorHAT.RELEASE)
 
 
-def forward(speed=200, dur=-1):
+def forward(speed=50, dur=-1):
 	spin(mFR, speed)
 	spin(mFL, speed)
 	spin(mBR, speed)

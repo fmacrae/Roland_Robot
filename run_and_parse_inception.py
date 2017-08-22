@@ -15,6 +15,6 @@ def do(cmd):
 
 	retval = p.wait()
 
-do('( cd /home/pi/tensorflow && ./label_image --image=../robot/'+imageFile+' ) &> ../robot/raw.output ' )
+do('( cd /home/pi/tensorflow && ./label_image --image=../Roland_Robot/'+imageFile+' ) &> ../Roland_Robot/raw.output ' )
 
 do('tail -5 raw.output | cut -d"]" -f2 | cut -d"(" -f1 > ' + dataFile)
