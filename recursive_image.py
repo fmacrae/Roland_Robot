@@ -165,6 +165,7 @@ def run_inference_on_image(image):
   create_graph()
   graph_time = time.time() - start_time
 
+  node_lookup = NodeLookup()
   with tf.Session() as sess:
     # Some useful tensors:
     # 'softmax:0': A tensor containing the normalized prediction across
@@ -183,16 +184,14 @@ def run_inference_on_image(image):
     runs = []
     for i in range(FLAGS.num_runs):
       start_time = time.time()
-      copyfile('/dev/shm/mjpeg/cam.jpg','test.jpg')
-      image='test.jpg'
+      #copyfile('/dev/shm/mjpeg/cam.jpg','test.jpg')
+      #image='test.jpg'
       if not tf.gfile.Exists(image):
         tf.logging.fatal('File does not exist %s', image)
       image_data = tf.gfile.FastGFile(image, 'rb').read()
       predictions = sess.run(softmax_tensor,
                              {'DecodeJpeg/contents:0': image_data})
-      print(predictions)
       predictions = np.squeeze(predictions)
-      node_lookup = NodeLookup()
       top_k = predictions.argsort()[-FLAGS.num_top_predictions:][::-1]
       for node_id in top_k:
         human_string = node_lookup.id_to_string(node_id)
