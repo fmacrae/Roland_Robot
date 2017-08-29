@@ -39,5 +39,19 @@ def scanLeftToRight():
     pwm.setPWM(0, 0, servoMid)
     time.sleep(2)
 
+def Look():
+  degree = 250/120
+  pwm.setPWMFreq(60)
+  while(True):
+    f = open('viewAngle.txt', 'r')
+    angle  = f.readline()
+    #print "%s Angle Read" % angle
+    servoSetting = servoMid+(degree*int(angle))
+    f.close()
+    #print "%d servoSetting" % servoSetting
+    pwm.setPWM(0, 0, servoSetting)
+    time.sleep(1)
+
 if  __name__ == "__main__":
-  scanLeftToRight()
+  #scanLeftToRight()
+  Look()
