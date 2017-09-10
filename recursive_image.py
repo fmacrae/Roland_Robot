@@ -47,6 +47,17 @@ import numpy as np
 from six.moves import urllib
 import tensorflow as tf
 
+
+import subprocess
+
+def do(cmd):
+  print(cmd)
+  p =subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  for line in p.stdout.readlines():
+    print(line)
+    retval = p.wait()
+
+
 FLAGS = tf.app.flags.FLAGS
 
 # classify_image_graph_def.pb:
@@ -193,10 +204,14 @@ def run_inference_on_image(image):
                              {'DecodeJpeg/contents:0': image_data})
       predictions = np.squeeze(predictions)
       top_k = predictions.argsort()[-FLAGS.num_top_predictions:][::-1]
+      counter=0
       for node_id in top_k:
         human_string = node_lookup.id_to_string(node_id)
         score = predictions[node_id]
         print('%s (score = %.5f)' % (human_string, score))
+        if counter == 0:
+          do('echo "I think I see ah '+human_string+'" | flite -voice slt')
+          counter=2
       runs.append(time.time() - start_time)
     for i, run in enumerate(runs):
       print('Run %03d:\t%0.4f seconds' % (i, run))
