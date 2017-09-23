@@ -5,6 +5,11 @@ This will run a simple robot with a webserver on a raspberry PI with the Adafrui
 ## Hardware
 
 - Raspberry PI 3
+- Voltage dividers 5V to 3.3V for the echo channels for the sonars, ebay has lots of options for this or build your own from two resistors.
+- If you want the Robot to speak get either a small self powered speaker system that uses 3.5mm jacks or something like a PAM8403 Amplifier Board which can run off your 5V outputs
+- Servo to rotate the camera SG90 or MG90 Mini Servos work fine
+- Get mini breadboards, lots of dupont wires and make sure to order sufficient header pins, including stackable ones for the adafruit hats.
+- nice to haves - camera mount and sonar mounts.  Ebay again is a good source.
 - 16GB (or larger) SIM Card
 - Adafruit Motor Hat (for wheels)
 - Any chassis with DC motors - for example: https://www.amazon.com/Emgreat-Chassis-Encoder-wheels-Battery/dp/B00GLO5SMY/ref=sr_1_2?ie=UTF8&qid=1486959207&sr=8-2&keywords=robot+chassis
@@ -12,6 +17,8 @@ This will run a simple robot with a webserver on a raspberry PI with the Adafrui
 - HC-SR04 sonars
 - Any stepper motor arm - for example: SainSmart DIY Control Palletizing Robot Arm for the arm (https://www.amazon.com/dp/B0179BTLZ2/ref=twister_B00YTW763Y?_encoding=UTF8&psc=1)
 - Raspberry PI compatible camera - for example: https://www.amazon.com/Raspberry-Pi-Camera-Module-Megapixel/dp/B01ER2SKFS/ref=sr_1_1?s=electronics&ie=UTF8&qid=1486960149&sr=1-1&keywords=raspberry+pi+camera
+
+Order the stuff well ahead of time, that way you can use the cheaper and slower vendors.  Adafruit is hard to get in the UK quickly at a reasonable price but you can find it.
 
 To get started, you should be able to make the robot work without the arm, sonar and servo hat.
 

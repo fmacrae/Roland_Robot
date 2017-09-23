@@ -32,6 +32,7 @@ information. These modifications have been surrounded with the comments:
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from shutil import copyfile
 
 import os.path
 import re
@@ -45,6 +46,17 @@ import time
 import numpy as np
 from six.moves import urllib
 import tensorflow as tf
+
+
+import subprocess
+
+def do(cmd):
+  print(cmd)
+  p =subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  for line in p.stdout.readlines():
+    print(line)
+    retval = p.wait()
+
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -164,6 +176,7 @@ def run_inference_on_image(image):
   create_graph()
   graph_time = time.time() - start_time
 
+  node_lookup = NodeLookup()
   with tf.Session() as sess:
     # Some useful tensors:
     # 'softmax:0': A tensor containing the normalized prediction across
@@ -175,14 +188,30 @@ def run_inference_on_image(image):
     # Runs the softmax tensor by feeding the image_data as input to the graph.
     softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
     # MODIFICATION BY SAM ABRAHAMS
+    image_data = tf.gfile.FastGFile(image, 'rb').read()
     for i in range(FLAGS.warmup_runs):
       predictions = sess.run(softmax_tensor,
                              {'DecodeJpeg/contents:0': image_data})
     runs = []
     for i in range(FLAGS.num_runs):
       start_time = time.time()
+      #copyfile('/dev/shm/mjpeg/cam.jpg','test.jpg')
+      #image='test.jpg'
+      if not tf.gfile.Exists(image):
+        tf.logging.fatal('File does not exist %s', image)
+      image_data = tf.gfile.FastGFile(image, 'rb').read()
       predictions = sess.run(softmax_tensor,
                              {'DecodeJpeg/contents:0': image_data})
+      predictions = np.squeeze(predictions)
+      top_k = predictions.argsort()[-FLAGS.num_top_predictions:][::-1]
+      counter=0
+      for node_id in top_k:
+        human_string = node_lookup.id_to_string(node_id)
+        score = predictions[node_id]
+        print('%s (score = %.5f)' % (human_string, score))
+        if counter == 0:
+          do('echo "I think I see ah '+human_string+'" | flite -voice slt')
+          counter=2
       runs.append(time.time() - start_time)
     for i, run in enumerate(runs):
       print('Run %03d:\t%0.4f seconds' % (i, run))
