@@ -7,3 +7,5 @@ smbus
 TwitterAPI
 google-api-python-client
 tweepy
+keras
+pykalman
