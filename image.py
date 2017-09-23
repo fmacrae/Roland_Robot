@@ -31,14 +31,10 @@ def classify(n):
 
 	do('echo '+suffix+' > images/INDEX')
 
-
-i=0
-read_data = 0
-
-with open('images/INDEX', 'r') as f:
-	read_data = int(f.read())
-
-i += read_data + 1;
-
-
-classify(i)
+for num in (1,5):
+	i=0
+	read_data = 0
+	with open('images/INDEX', 'r') as f:
+		read_data = int(f.read())
+	i += read_data + 1;
+	classify(i)
