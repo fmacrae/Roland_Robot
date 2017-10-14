@@ -228,9 +228,8 @@ def run_inference_on_image(image):
           do('echo "I think I see ah '+human_string+'" | flite -voice slt')
           counter=2
 
-      results_list.append({'human_strings': human_strings,
-                           'probabilities': probabilities,
-                           'eventOccurredDateTime': datetime.datetime.now().strftime("%d-%m-%YT%H:%M:%SZ")})
+      results_list.append({'human_strings': human_strings, 'probabilities':probabilities})
+      
       runs.append(time.time() - start_time)
     for i, run in enumerate(runs):
       print('Run %03d:\t%0.4f seconds' % (i, run))
@@ -241,7 +240,7 @@ def run_inference_on_image(image):
     print('Build graph time: %0.4f' % graph_time)
     print('Number of warmup runs: %d' % FLAGS.warmup_runs)
     print('Number of test runs: %d' % FLAGS.num_runs)
-
+    print(results_list)
     with open('dump.json', 'w') as f:
         json.dump(results_list, f)
 
