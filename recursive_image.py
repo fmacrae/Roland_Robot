@@ -47,6 +47,9 @@ import numpy as np
 from six.moves import urllib
 import tensorflow as tf
 
+# for dumping properly
+import datetime
+import json
 
 import subprocess
 
@@ -193,6 +196,9 @@ def run_inference_on_image(image):
       predictions = sess.run(softmax_tensor,
                              {'DecodeJpeg/contents:0': image_data})
     runs = []
+
+    results_list = []
+
     for i in range(FLAGS.num_runs):
       start_time = time.time()
       #copyfile('/dev/shm/mjpeg/cam.jpg','test.jpg')
@@ -205,13 +211,26 @@ def run_inference_on_image(image):
       predictions = np.squeeze(predictions)
       top_k = predictions.argsort()[-FLAGS.num_top_predictions:][::-1]
       counter=0
+
+      human_strings = []
+      probabilities = []
+
       for node_id in top_k:
         human_string = node_lookup.id_to_string(node_id)
         score = predictions[node_id]
+
+        human_strings.append(human_string)
+        probabilities.append(score)
+
         print('%s (score = %.5f)' % (human_string, score))
+
         if counter == 0:
           do('echo "I think I see ah '+human_string+'" | flite -voice slt')
           counter=2
+
+      results_list.append({'human_strings': human_strings,
+                           'probabilities': probabilities,
+                           'eventOccurredDateTime': datetime.datetime.now().strftime("%d-%m-%YT%H:%M:%SZ")})
       runs.append(time.time() - start_time)
     for i, run in enumerate(runs):
       print('Run %03d:\t%0.4f seconds' % (i, run))
@@ -222,6 +241,10 @@ def run_inference_on_image(image):
     print('Build graph time: %0.4f' % graph_time)
     print('Number of warmup runs: %d' % FLAGS.warmup_runs)
     print('Number of test runs: %d' % FLAGS.num_runs)
+
+    with open('dump.json', 'w') as f:
+        json.dump(results_list, f)
+
     # END OF MODIFICATION
 
 def maybe_download_and_extract():
