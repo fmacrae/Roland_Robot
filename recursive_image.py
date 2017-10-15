@@ -196,7 +196,8 @@ def run_inference_on_image(image):
       predictions = sess.run(softmax_tensor,
                              {'DecodeJpeg/contents:0': image_data})
     runs = []
-
+    # this will be list of results summary to dump to file as json for ML smart
+    # "stop robot running" analysis
     results_list = []
 
     for i in range(FLAGS.num_runs):
@@ -212,6 +213,7 @@ def run_inference_on_image(image):
       top_k = predictions.argsort()[-FLAGS.num_top_predictions:][::-1]
       counter=0
 
+      # sub results for the results_list, one list per inception call.
       human_strings = []
       probabilities = []
 
@@ -220,7 +222,7 @@ def run_inference_on_image(image):
         score = predictions[node_id]
 
         human_strings.append(human_string)
-        probabilities.append(score)
+        probabilities.append(float(score))
 
         print('%s (score = %.5f)' % (human_string, score))
 
@@ -241,6 +243,7 @@ def run_inference_on_image(image):
     print('Number of warmup runs: %d' % FLAGS.warmup_runs)
     print('Number of test runs: %d' % FLAGS.num_runs)
     print(results_list)
+
     with open('dump.json', 'w') as f:
         json.dump(results_list, f)
 
