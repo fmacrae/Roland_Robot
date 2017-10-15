@@ -196,9 +196,17 @@ def run_inference_on_image(image):
       predictions = sess.run(softmax_tensor,
                              {'DecodeJpeg/contents:0': image_data})
     runs = []
-    # this will be list of results summary to dump to file as json for ML smart
-    # "stop robot running" analysis
+    # object we will dump to json for analysis
     results_list = []
+    # store all the things roland has seen (i.e top inception result)
+    things_roland_has_seen = []
+    # after every inception result, find the size of the set of 
+    # things roland has seen
+    num_unique_things_roland_has_seen = []
+    # if roland hasn't seen anything new this time, counter will go up
+    num_times_not_seen_anything_new = 0
+    # if roland has seen anything new this number of times he wants to stop
+    max_num_times_not_seen_anything_new = 20
 
     for i in range(FLAGS.num_runs):
       start_time = time.time()
@@ -213,7 +221,6 @@ def run_inference_on_image(image):
       top_k = predictions.argsort()[-FLAGS.num_top_predictions:][::-1]
       counter=0
 
-      # sub results for the results_list, one list per inception call.
       human_strings = []
       probabilities = []
 
@@ -228,7 +235,22 @@ def run_inference_on_image(image):
 
         if counter == 0:
           do('echo "I think I see ah '+human_string+'" | flite -voice slt')
-          counter=2
+          counter = 2
+
+          # have I been here before?
+	  things_roland_has_seen.append(human_string)
+	  num_unique_things_roland_has_seen.append(len(set(things_roland_has_seen)))
+	  
+          print('Have seen %.1f unique things this run' % num_unique_things_roland_has_seen[-1]) 
+          
+          if (len(num_unique_things_roland_has_seen) > 2 and
+              num_unique_things_roland_has_seen[-1] == num_unique_things_roland_has_seen[-2]):
+              num_times_not_seen_anything_new = num_times_not_seen_anything_new + 1    	  
+              print('Have not seen anything new %.1f times' % num_times_not_seen_anything_new)
+          if num_times_not_seen_anything_new > max_num_times_not_seen_anything_new:
+	      do('echo "I can not see anything new please disable me" | flite -voice slt')
+          if num_times_not_seen_anything_new > 2*max_num_times_not_seen_anything_new:
+              do('echo "Please I am so bored kill me now" | flite -voice slt')
 
       results_list.append({'human_strings': human_strings, 'probabilities':probabilities})
       
@@ -242,8 +264,7 @@ def run_inference_on_image(image):
     print('Build graph time: %0.4f' % graph_time)
     print('Number of warmup runs: %d' % FLAGS.warmup_runs)
     print('Number of test runs: %d' % FLAGS.num_runs)
-    print(results_list)
-
+    #print(results_list)
     with open('dump.json', 'w') as f:
         json.dump(results_list, f)
 
