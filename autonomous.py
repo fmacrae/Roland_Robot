@@ -2,7 +2,7 @@
 import wheels
 import sonar
 import time
-
+from Whiskers import Whiskers
 
 
 
@@ -15,6 +15,7 @@ BACKWARD=4
 def autodrive(dur):
 	start_time = time.time()
 	end_time = time.time() + dur
+	objWhiskers = Whiskers()
 
 	mode = FORWARD
 
@@ -26,11 +27,14 @@ def autodrive(dur):
 		cdist = sonar.cdist()
 		ldist = sonar.ldist()
 		rdist= sonar.rdist()
+		lbump = objWhiskers.checkBumpLeft()
+		rbump = objWhiskers.checkBumpRight()
 
 		print ("%d %d %d" % (ldist, cdist, rdist))
+		print ("bumpers %d %d" % (lbump, rbump))
 		
 		if (mode == FORWARD):
-			if (cdist < 35 or ldist <6 or rdist < 6):
+			if (cdist < 35 or ldist <6 or rdist < 6 or lbump or rbump):
                                 print ("turning")
                                 wheels.stop()
 				if (ldist < rdist):
@@ -58,4 +62,4 @@ def autodrive(dur):
 
 	
 if (__name__ == '__main__'):
-	autodrive(30)
+	autodrive(600)
