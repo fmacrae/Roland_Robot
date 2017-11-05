@@ -1,12 +1,12 @@
 """
 Andy McMahon: Roland the lego-hooverbot, ML club.
-
 """
 directions = 3 # forward, left 90, right 90
 
 import qlearn
-
-
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class RolandBrain(object):
 
@@ -22,15 +22,20 @@ class RolandBrain(object):
         self.lastState = None
         self.lastAction = None
         self.objects_seen = []
+        self.num_total_observations = 0
 
     def go_in_direction(self, direction):
 
         #=============
         # send command to controller to move in direction, map {'0': forward, '1': left', '2:'right'}
         #=============
+        logger.info('Move direction: %s', direction)
+        logger.info('Number observations: %s', self.num_total_observations)
+        logger.info('Number objects seen: %s', self.objects_seen)
         return None
 
     def update(self, new_object):
+        self.num_total_observations += 1
         state = self.calcState(new_object)
         reward = -1
 
