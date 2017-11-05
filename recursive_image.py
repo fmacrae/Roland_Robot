@@ -33,7 +33,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from shutil import copyfile
-
+from Adafruit_LSM303 import Adafruit_LSM303
 import os.path
 import re
 import sys
@@ -207,9 +207,13 @@ def run_inference_on_image(image):
     num_times_not_seen_anything_new = 0
     # if roland has seen anything new this number of times he wants to stop
     max_num_times_not_seen_anything_new = 20
+    #create connection to the compass
+    oOrientation = Adafruit_LSM303()
 
     for i in range(FLAGS.num_runs):
       start_time = time.time()
+      curOrientation = oOrientation.read()  
+
       #copyfile('/dev/shm/mjpeg/cam.jpg','test.jpg')
       #image='test.jpg'
       if not tf.gfile.Exists(image):
@@ -232,10 +236,12 @@ def run_inference_on_image(image):
         probabilities.append(float(score))
 
         print('%s (score = %.5f)' % (human_string, score))
+        print(curOrientation)
 
         if counter == 0:
           do('echo "I think I see ah '+human_string+'" | flite -voice slt')
           counter = 2
+          
 
           # have I been here before?
 	  things_roland_has_seen.append(human_string)

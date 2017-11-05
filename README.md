@@ -17,7 +17,7 @@ This will run a simple robot with a webserver on a raspberry PI with the Adafrui
 - HC-SR04 sonars
 - Any stepper motor arm - for example: SainSmart DIY Control Palletizing Robot Arm for the arm (https://www.amazon.com/dp/B0179BTLZ2/ref=twister_B00YTW763Y?_encoding=UTF8&psc=1)
 - Raspberry PI compatible camera - for example: https://www.amazon.com/Raspberry-Pi-Camera-Module-Megapixel/dp/B01ER2SKFS/ref=sr_1_1?s=electronics&ie=UTF8&qid=1486960149&sr=1-1&keywords=raspberry+pi+camera
-
+- for Whiskers to work you have to connect two bump sensors like this guy made http://www.instructables.com/id/Cheap%2C-Durable%2C-Very-Effective-Robot-Bump-Sensor/#ampshare=http://www.instructables.com/id/Cheap%252C-Durable%252C-Very-Effective-Robot-Bump-Sensor/ and connect via a safe circuit from your 3.3V outputs like this guy shows.  http://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/robot/buttons_and_switches/ Do not miss out the resistors or you may fry your pi.
 Order the stuff well ahead of time, that way you can use the cheaper and slower vendors.  Adafruit is hard to get in the UK quickly at a reasonable price but you can find it.
 
 To get started, you should be able to make the robot work without the arm, sonar and servo hat.
@@ -36,7 +36,7 @@ To get started, you should be able to make the robot work without the arm, sonar
 
 Here is the robot I made that uses this software
 
-![Robots](https://s3.amazonaws.com/websofttechnology/roland.jpg)
+![Robots](https://s3.amazonaws.com/websofttechnology/roland.png)
 
 ## Wiring The Robot
 ### Sonar
@@ -46,6 +46,8 @@ If you want to use the default sonar configuation, wire like this:
 - Left sonar trigger GPIO pin 23 echo 24
 - Center sonar trigger GPIO pin 17 echo 18
 - Right sonar trigger GPIO pin 22 echo 27
+- Right whisker GPIO pin 21
+- Left whisker GPIO pin 20
 
 You can modify the pins by making a robot.conf file.
 
