@@ -242,18 +242,18 @@ def run_inference_on_image(image):
         probabilities.append(float(score))
 
         print('%s (score = %.5f)' % (human_string, score))
-        print(curOrientation)
-        inception_file.write(str(human_string)+'\n')
-        inception_file.write(str(score)+'\n')
-        inception_file.write(str(curOrientation))
-        inception_file.write('\n')
-        inception_file.write(sLogDir+timestr+'.jpg\n')
 
         if counter == 0:
           do('echo "I think I see ah '+human_string+'" | flite -voice slt')
           counter = 2
           
 
+          print(curOrientation)
+          inception_file.write(str(human_string)+'\n')
+          inception_file.write(str(score)+'\n')
+          inception_file.write(str(curOrientation))
+          inception_file.write('\n')
+          inception_file.write(sLogDir+timestr+'.jpg\n')
           # have I been here before?
 	  things_roland_has_seen.append(human_string)
 	  num_unique_things_roland_has_seen.append(len(set(things_roland_has_seen)))
