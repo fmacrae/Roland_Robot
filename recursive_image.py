@@ -245,7 +245,7 @@ def run_inference_on_image(image):
         print(curOrientation)
         inception_file.write(str(human_string)+'\n')
         inception_file.write(str(score)+'\n')
-        inception_file.write(curOrientation)
+        inception_file.write(str(curOrientation))
         inception_file.write('\n')
         inception_file.write(sLogDir+timestr+'.jpg\n')
 
