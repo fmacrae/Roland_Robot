@@ -178,7 +178,7 @@ def run_inference_on_image(image):
   #find out the directory to log to
   with open('run_data_directory.txt') as f:
     sLogDir=f.read()
-
+  sLogDir=sLogDir.rstrip()
 
   # Creates graph from saved GraphDef.
   start_time = time.time()
@@ -316,3 +316,4 @@ def main(_):
 
 if __name__ == '__main__':
   tf.app.run()
+
