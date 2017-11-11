@@ -23,18 +23,15 @@ def autodrive(dur):
 	#grab the unique id for the run from a file then increment it by 1 and store back into the file
 	iRunNum = 0	
 	with open('data/current_run.txt') as f:
-		w, h = [int(x) for x in next(f).split()] # read first line
-		array = []
-		for line in f: # read rest of lines
-			array.append([int(x) for x in line.split()])
-		print ("Run number is %d", array(1,1))
-		iRunNum=arr(1,1)
+		sRunNum=f.read()
+		print ("Run number is %s", str(sRunNum))
+		iRunNum=int(sRunNum)
 		iRunNum+=1
 	outf = open('data/current_run.txt', 'w')
 	outf.write(str(iRunNum))
 	
 	#now build the run data directory and store its location in a flat file
-	sRunDataDirectory='data/'+iRunNum+'-run-'+timestr+'/'
+	sRunDataDirectory='data/'+str(iRunNum)+'-run-'+timestr+'/'
 	os.makedirs(sRunDataDirectory)
 
 	#write the directory to a file
