@@ -1,7 +1,7 @@
 """
 Andy McMahon: Roland the lego-hooverbot, ML club.
 """
-directions = 3 # forward, left 90, right 90
+directions = 4 # forward, left 90, right 90
 
 import AIclasses.qlearn as qlearn
 import logging

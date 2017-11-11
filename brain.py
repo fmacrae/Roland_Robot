@@ -4,14 +4,18 @@ ROLAND'S BRAIN MOFO!
 
 from brain.rolandbrain import RolandBrain
 import numpy as np
+import os
 
 # will get this from current run txt
 
-with open("data/current_run.txt", "r") as f:
+with open("run_data_directory.txt", "r") as f:
     lineList = f.readlines()
 
-logPath = 'data/' + lineList[-1].rstrip()
+#logPath = 'data/' + lineList[-1].rstrip()
+logPath = lineList[-1].rstrip()
 
+if not os.path.exists(logPath):
+    os.makedirs(logPath)
 
 if __name__ == "__main__":
 
