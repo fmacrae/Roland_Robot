@@ -221,7 +221,7 @@ def run_inference_on_image(image):
       curOrientation = oOrientation.read()  
       timestr = time.strftime("%Y%m%d-%H%M%S")
 
-      copyfile('/dev/shm/mjpeg/cam.jpg',sLogDir+timestr'.jpg')
+      copyfile('/dev/shm/mjpeg/cam.jpg',sLogDir+timestr+'.jpg')
       if not tf.gfile.Exists(image):
         tf.logging.fatal('File does not exist %s', image)
       image_data = tf.gfile.FastGFile(image, 'rb').read()
@@ -246,7 +246,7 @@ def run_inference_on_image(image):
         inception_file.write(str(human_string)+'\n')
         inception_file.write(str(score)+'\n')
         inception_file.write(curOrientation+'\n')
-        inception_file.write(sLogDir+timestr'.jpg\n')
+        inception_file.write(sLogDir+timestr+'.jpg\n')
 
         if counter == 0:
           do('echo "I think I see ah '+human_string+'" | flite -voice slt')
