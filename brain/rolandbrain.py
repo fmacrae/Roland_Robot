@@ -6,18 +6,12 @@ directions = 3 # forward, left 90, right 90
 import AIclasses.qlearn as qlearn
 import logging
 import math
+import os
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-hdlr = logging.FileHandler('brain.log')
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr)
-logger.setLevel(logging.INFO)
 
 class RolandBrain(object):
 
-    def __init__(self):
+    def __init__(self, logPath=None):
         # If we implement a qlearn method.
         self.ai = qlearn.QLearn(actions=range(directions),
                                 alpha=0.1, gamma=0.9, epsilon=0.1)
@@ -33,6 +27,21 @@ class RolandBrain(object):
         self.observational_entropy = 0
         self.information_gains = []
 
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(__name__)
+
+        if logPath is None:
+            hdlr = logging.FileHandler('brain.log')
+        else:
+            hdlr = logging.FileHandler(os.path.join(logPath, 'brain.log'))
+
+        formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+        hdlr.setFormatter(formatter)
+        logger.addHandler(hdlr)
+        logger.setLevel(logging.INFO)
+
+        self.logger = logger
+
     def calculate_observational_entropy(self):
 
         total_obs = sum(self.observations.values())
@@ -47,10 +56,10 @@ class RolandBrain(object):
         #=============
         # send command to controller to move in direction, map {'0': forward, '1': left', '2:'right'}
         #=============
-        logger.info('suggestedMove: %s', direction)
-        logger.info('obsNumber: %s', self.num_total_observations)
-        logger.info('observations: %s', str(self.observations))
-        logger.info('obsEntropy: %s', str(self.observational_entropy))
+        self.logger.info('suggestedMove: %s', direction)
+        self.logger.info('obsNumber: %s', self.num_total_observations)
+        self.logger.info('observations: %s', str(self.observations))
+        self.logger.info('obsEntropy: %s', str(self.observational_entropy))
         return None
 
     def update(self, new_object):
