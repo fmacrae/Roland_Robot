@@ -9,6 +9,11 @@ import math
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+hdlr = logging.FileHandler('brain.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr)
+logger.setLevel(logging.INFO)
 
 class RolandBrain(object):
 
@@ -42,10 +47,10 @@ class RolandBrain(object):
         #=============
         # send command to controller to move in direction, map {'0': forward, '1': left', '2:'right'}
         #=============
-        logger.info('Move direction: %s', direction)
-        logger.info('Number observations: %s\n', self.num_total_observations)
-        logger.info('Objects seen: %s\n', str(self.observations))
-        logger.info('Observational entropy: %s\n==============', str(self.observational_entropy))
+        logger.info('suggestedMove: %s', direction)
+        logger.info('obsNumber: %s', self.num_total_observations)
+        logger.info('observations: %s', str(self.observations))
+        logger.info('obsEntropy: %s', str(self.observational_entropy))
         return None
 
     def update(self, new_object):

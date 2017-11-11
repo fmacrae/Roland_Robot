@@ -248,7 +248,7 @@ def run_inference_on_image(image):
               num_times_not_seen_anything_new = num_times_not_seen_anything_new + 1    	  
               print('Have not seen anything new %.1f times' % num_times_not_seen_anything_new)
           if num_times_not_seen_anything_new > max_num_times_not_seen_anything_new:
-	      do('echo "I can not see anything new please disable me" | flite -voice slt')
+	          do('echo "I can not see anything new please disable me" | flite -voice slt')
           if num_times_not_seen_anything_new > 2*max_num_times_not_seen_anything_new:
               do('echo "Please I am so bored kill me now" | flite -voice slt')
 

@@ -4,9 +4,6 @@ import sonar
 import time
 
 
-
-
-
 FORWARD=1
 LEFT=2
 RIGHT=3
@@ -59,3 +56,4 @@ def autodrive(dur):
 	
 if (__name__ == '__main__'):
 	autodrive(30)
+

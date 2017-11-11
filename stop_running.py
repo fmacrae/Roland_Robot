@@ -20,12 +20,11 @@ test = df['top_human_string']
 def intersect(a, b):
     return list(set(a) & set(b))
 
-"""
-Measures of similarity :
 
-    are the items I've seen before similar?
-    is the percentage of which I've seen them similar?
-"""
+#Measures of similarity :
+#are the items I've seen before similar?
+#is the percentage of which I've seen them similar?
+
 stats = []
 lens = []
 size = 1
