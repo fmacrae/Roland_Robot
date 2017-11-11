@@ -3,17 +3,46 @@ import wheels
 import sonar
 import time
 from Whiskers import Whiskers
+import os
 
 FORWARD=1
 LEFT=2
 RIGHT=3
 BACKWARD=4
 
+
+
+
+
+
 def autodrive(dur):
 	start_time = time.time()
 	end_time = time.time() + dur
 	objWhiskers = Whiskers()
+	timestr = time.strftime("%Y%m%d-%H%M%S")
+	#grab the unique id for the run from a file then increment it by 1 and store back into the file
+	iRunNum = 0	
+	with open('data/current_run.txt') as f:
+		w, h = [int(x) for x in next(f).split()] # read first line
+		array = []
+		for line in f: # read rest of lines
+			array.append([int(x) for x in line.split()])
+		print ("Run number is %d", array(1,1))
+		iRunNum=arr(1,1)
+		iRunNum+=1
+	outf = open('data/current_run.txt', 'w')
+	outf.write(str(iRunNum))
+	
+	#now build the run data directory and store its location in a flat file
+	sRunDataDirectory='data/'+iRunNum+'-run-'+timestr+'/'
+	os.makedirs(sRunDataDirectory)
 
+	#write the directory to a file
+	outf = open('run_data_directory.txt', 'w')
+	outf.write(str(sRunDataDirectory))
+	print ('Logging to %s', sRunDataDirectory)
+	
+	#Start driving!
 	mode = FORWARD
 
 	wheels.forward(150)
