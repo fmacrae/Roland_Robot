@@ -174,6 +174,12 @@ def run_inference_on_image(image):
     tf.logging.fatal('File does not exist %s', image)
   image_data = tf.gfile.FastGFile(image, 'rb').read()
 
+
+  #find out the directory to log to
+  with open('run_data_directory.txt') as f:
+    sLogDir=f.read()
+
+
   # Creates graph from saved GraphDef.
   start_time = time.time()
   create_graph()
@@ -209,13 +215,13 @@ def run_inference_on_image(image):
     max_num_times_not_seen_anything_new = 20
     #create connection to the compass
     oOrientation = Adafruit_LSM303()
-
+    inception_file = open(sLogDir+'Observations.txt', 'w')
     for i in range(FLAGS.num_runs):
       start_time = time.time()
       curOrientation = oOrientation.read()  
+      timestr = time.strftime("%Y%m%d-%H%M%S")
 
-      #copyfile('/dev/shm/mjpeg/cam.jpg','test.jpg')
-      #image='test.jpg'
+      copyfile('/dev/shm/mjpeg/cam.jpg',sLogDir+timestr'.jpg')
       if not tf.gfile.Exists(image):
         tf.logging.fatal('File does not exist %s', image)
       image_data = tf.gfile.FastGFile(image, 'rb').read()
@@ -237,6 +243,10 @@ def run_inference_on_image(image):
 
         print('%s (score = %.5f)' % (human_string, score))
         print(curOrientation)
+        inception_file.write(str(human_string)+'\n')
+        inception_file.write(str(score)+'\n')
+        inception_file.write(curOrientation+'\n')
+        inception_file.write(sLogDir+timestr'.jpg\n')
 
         if counter == 0:
           do('echo "I think I see ah '+human_string+'" | flite -voice slt')
