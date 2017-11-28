@@ -20,7 +20,7 @@ This will run a simple robot with a webserver on a raspberry PI with the Adafrui
 - for Whiskers to work you have to connect two bump sensors like this guy made http://www.instructables.com/id/Cheap%2C-Durable%2C-Very-Effective-Robot-Bump-Sensor/#ampshare=http://www.instructables.com/id/Cheap%252C-Durable%252C-Very-Effective-Robot-Bump-Sensor/ and connect via a safe circuit from your 3.3V outputs like this guy shows.  http://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/robot/buttons_and_switches/ Do not miss out the resistors or you may fry your pi.
 Order the stuff well ahead of time, that way you can use the cheaper and slower vendors.  Adafruit is hard to get in the UK quickly at a reasonable price but you can find it.
 
-To get started, you should be able to make the robot work without the arm, sonar and servo hat.
+To get started, you should be able to make the robot work without the arm, whiskers, sonar and servo hat.
 
 ## Programs
 
@@ -98,7 +98,7 @@ Install dependencies
 ```
 sudo pip install -r requirements.txt
 sudo apt-get install flite
-
+sudo apt-get install python-paramiko
 ```
 
 At this point you should be able to drive your robot locally, try:
@@ -160,7 +160,7 @@ chmod u+x *.sh
 ./install.sh
 ```
 
-Now a stream of images from the camera should be constantly updating the file at /dev/shm/mjpeg.  Nginx will serve up the image directly if you request localhost/cam.jpg.
+Now a stream of images from the camera should be constantly updating the file at /dev/shm/mjpeg.  Nginx will serve up the image directly if you request localhost/cam.jpg.  Be aware that SD cards only have a limited write capacity so if you leave this running 24 7 then over a few months you will burn out a consumer level card.  Make sure you clone your card at least every other month as it will either lock in read only state or start to have write errors.  It is a good practice to get into.  Either plug the Pi into a monitor and use the SD Card clone function or put the sd card into your main machine and use disks to take an image of it.  Another warning, use the same SD Card type as there is a minor variation in total size between the 16Gb manufacturers.
 
 #### tensorflow
 
@@ -204,7 +204,6 @@ Once everything is installed and ready you can get the robot running using:
 sudo sh server.sh &
 python inception_server.py &
 ```
-think second one is to d/l the files needed to tmp
  
 Then on localhost:
 - port 9999 for inception  http://localhost:9999
