@@ -66,12 +66,28 @@ You can easily change this but this is what wheels.py expects
 ### basic setup
 
 There are a ton of articles on how to do basic setup of a Raspberry PI - one good one is here https://www.howtoforge.com/tutorial/howto-install-raspbian-on-raspberry-pi/
+Boot it with a screen, keyboard and mouse, connect to your wifi and note your IP address.  Best to log into your hub and assign it a static IP address so you know what to ssh to.
+
 
 You will need to turn on i2c and optionally the camera
 
 ```
-raspi-config
+sudo raspi-config
 ```
+1. Change your password as you need one for SSH
+2. Change your hostname to something meaningful like Robot or Roland
+5. Interfacing options, enable: P1 Camera, P2 SSH, P5 I2C
+8. Update - always update :)
+Finish
+
+Now upgrade your Pi - takes a while....then do a restart
+```
+sudo apt-get update
+sudo apt-get upgrade
+pip install --upgrade pip
+sudo shutdown now
+```
+Now you can unplug and SSH into it from a real computer.
 
 Next you will need to download i2c tools and smbus
 
@@ -93,9 +109,16 @@ git clone https://github.com/fmacrae/Roland_Robot.git
 cd Roland_Robot
 ```
 
-Install dependencies
+Install dependencies = adafruit pip install fails at moment so install manually
 
 ```
+cd ~
+git clone https://github.com/adafruit/Adafruit-Motor-HAT-Python-Library.git
+cd Adafruit-Motor-HAT-Python-Library
+sudo apt-get install python-dev
+sudo python setup.py install
+cd ~/Roland_Robot
+easy_install pykalman
 sudo pip install -r requirements.txt
 sudo apt-get install flite
 sudo apt-get install python-paramiko
@@ -147,7 +170,8 @@ sudo systemctl enable web
 sudo systemctl start web
 ```
 
-Your webservice should be started now.  You can try driving your robot with buttons or arrow keys
+Your webservice should be started now.
+
 
 #### camera
 
@@ -159,7 +183,12 @@ cd RPi_Cam_Web_Interface
 chmod u+x *.sh
 ./install.sh
 ```
+Popup giving you choices will appear, accept defaults.  You'll get a few errors like:
+```
+Failed to start The Apache HTTP Server.
+```
 
+But just ignore them.
 Now a stream of images from the camera should be constantly updating the file at /dev/shm/mjpeg.  Nginx will serve up the image directly if you request localhost/cam.jpg.  Be aware that SD cards only have a limited write capacity so if you leave this running 24 7 then over a few months you will burn out a consumer level card.  Make sure you clone your card at least every other month as it will either lock in read only state or start to have write errors.  It is a good practice to get into.  Either plug the Pi into a monitor and use the SD Card clone function or put the sd card into your main machine and use disks to take an image of it.  Another warning, use the same SD Card type as there is a minor variation in total size between the 16Gb manufacturers.
 
 #### tensorflow
@@ -174,12 +203,32 @@ sudo pip install tensorflow-0.11.0-cp27-none-linux_armv7l.whl
 Last command took an age... run it and go out or run it just before bed so it can go overnight
  
 It also doesn’t install tensorflow, just the python interfaces or at least didn’t get a proper tensorflow directory with any of the stuff we need….
- 
+
+``` 
+cd ~
+git clone https://github.com/tensorflow/tensorflow.git
+cd tensorflow
+tensorflow/contrib/makefile/download_dependencies.sh
+sudo apt-get install -y autoconf automake libtool gcc-4.8 g++-4.8
+cd tensorflow/contrib/makefile/downloads/protobuf/
+./autogen.sh
+./configure
+make
+sudo make install
+sudo ldconfig  # refresh shared library cache
+cd ../../../../..
+export HOST_NSYNC_LIB=`tensorflow/contrib/makefile/compile_nsync.sh`
+export TARGET_NSYNC_LIB="$HOST_NSYNC_LIB"
+make -f tensorflow/contrib/makefile/Makefile HOST_OS=PI TARGET=PI \
+ OPTFLAGS="-Os -mfpu=neon-vfpv4 -funsafe-math-optimizations -ftree-vectorize" CXX=g++-4.8
+
+```
+
 I found running the steps from:
 - https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/makefile#raspberry-pi
 - https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/pi_examples
 
-Install and compile tensorflow correctly for the Pi.  Takes around 3hrs to do
+Install and compile tensorflow correctly for the Pi.  Takes around 3-8hrs to do so kick off the make commands and find something else to do for a few hours.  The final make command is best run overnight.
  
 
 Now create a symbolic link for the labels in your tensorflow directory to the pi_examples label_image directory
@@ -201,9 +250,16 @@ sudo systemctl start inception
 
 Once everything is installed and ready you can get the robot running using:
 ```
+sh startRobot.sh
+```
+
+If you want to control it via the web interface then do this:
+
+```
 sudo sh server.sh &
 python inception_server.py &
 ```
+
  
 Then on localhost:
 - port 9999 for inception  http://localhost:9999

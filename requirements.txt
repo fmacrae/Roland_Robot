@@ -3,9 +3,6 @@ Adafruit-MotorHAT
 picamera
 flask
 RPi.GPIO
-smbus
 TwitterAPI
 google-api-python-client
 tweepy
-keras
-pykalman
