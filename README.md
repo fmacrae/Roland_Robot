@@ -153,7 +153,10 @@ sudo nginx -s reload
 
 #### gunicorn
 
-install gunicorn
+install gunicorn and the web services if you want to control the robot manually 
+```
+sudo pip install gunicorn
+```
 
 
 copy configuration file from services/web.service /etc/systemd/system/web.service
@@ -224,7 +227,7 @@ make -f tensorflow/contrib/makefile/Makefile HOST_OS=PI TARGET=PI \
 
 ```
 
-I found running the steps from:
+More detail on the up to date instructions can be seen here:
 - https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/makefile#raspberry-pi
 - https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/pi_examples
 
@@ -248,30 +251,23 @@ sudo systemctl start inception
 ```
 
 
-Once everything is installed and ready you can get the robot running using:
+Once everything is installed and ready you can get the robot running, doing self driving and appreciating its environment using:
 ```
 sh startRobot.sh
 ```
 
-If you want to control it via the web interface then do this:
+
+To do the control and access it via web interface
 
 ```
 sudo sh server.sh &
 python inception_server.py &
 ```
+Then on your pi:
+- port 9999 for inception  http://yourPiAddress:9999
+- port 8000 for drive http://yourPiAddress:8000
+- /cam.jpg to see what it sees  http://yourPiAddress/cam.jpg
 
- 
-Then on localhost:
-- port 9999 for inception  http://localhost:9999
-- port 8000 for drive http://localhost:8000
-- /cam.jpg to see what it sees  http://localhost/cam.jpg
- 
-I have an issue with drive as it tries to show the picture and fails as its appending ?T=1242341…
- 
-Not sure how to resolve and lukas has an issue open for it.
- 
-https://github.com/lukas/robot/issues/6
- 
  
 
 #### notification
