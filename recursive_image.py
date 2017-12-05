@@ -70,7 +70,7 @@ FLAGS = tf.app.flags.FLAGS
 # imagenet_2012_challenge_label_map_proto.pbtxt:
 #   Text representation of a protocol buffer mapping a label to synset ID.
 tf.app.flags.DEFINE_string(
-    'model_dir', '/tmp/imagenet',
+    'model_dir', '~/imagenet',
     """Path to classify_image_graph_def.pb, """
     """imagenet_synset_to_human_label_map.txt, and """
     """imagenet_2012_challenge_label_map_proto.pbtxt.""")
@@ -176,9 +176,11 @@ def run_inference_on_image(image):
 
 
   #find out the directory to log to
-  with open('run_data_directory.txt') as f:
+  with open("run_data_directory.txt", "r") as f:
     sLogDir=f.read()
   sLogDir=sLogDir.rstrip()
+  print ("Classifier thinks logging to")
+  print (sLogDir)
 
   # Creates graph from saved GraphDef.
   start_time = time.time()
@@ -282,7 +284,7 @@ def run_inference_on_image(image):
     print('Number of warmup runs: %d' % FLAGS.warmup_runs)
     print('Number of test runs: %d' % FLAGS.num_runs)
     #print(results_list)
-    with open('dump.json', 'w') as f:
+    with open(sLogDir+'dump.json', 'w') as f:
         json.dump(results_list, f)
 
     # END OF MODIFICATION

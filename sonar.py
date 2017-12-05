@@ -84,7 +84,7 @@ def raw_distance(TRIG, ECHO):
                                             
 
 def distance(i):
-#    print "Distance Measurement In Progress"
+    #print "Distance Measurement In Progress"
 
     GPIO.output(TRIG[i], True)
 
@@ -94,13 +94,27 @@ def distance(i):
 
     pulse_end = 0;
     pulse_start = 0;
-    
+    #print "ping"
+    if GPIO.input(ECHO[i])==1:
+        print "stuck in high state"
+        return 0
+    #else:
+    #    print "not stuck in high state"
+    #print "waiting for echo to go to 0"
+    pulse_pre = time.time()
     while GPIO.input(ECHO[i])==0:
         pulse_start = time.time()
-
+        if (pulse_start - pulse_pre > 0.1):
+           print "would not level"
+           return 666 
+        
+    #print "sent"
     while GPIO.input(ECHO[i])==1:
         pulse_end = time.time()
-        
+        if (pulse_end - pulse_start > 1):
+           print "no reply"
+           return 667 
+    #print "pong"    
     if (pulse_end == 0 or pulse_start==0):
         return 1000
         
@@ -110,7 +124,7 @@ def distance(i):
 
     distance = round(distance, 2)
 
- #   print "Distance:",distance,"cm"
+    #print "Distance:",distance,"cm"
 
     return distance
 
@@ -125,6 +139,7 @@ def cdist():
 
 
 if __name__ == "__main__":
+   print "Cent:",cdist(),"cm"
    print "Left:",ldist(),"cm" 
    print "Cent:",cdist(),"cm"
    print "Right:",rdist(),"cm"
