@@ -15,9 +15,10 @@ This will run a simple robot with a webserver on a raspberry PI with the Adafrui
 - Any chassis with DC motors - for example: https://www.amazon.com/Emgreat-Chassis-Encoder-wheels-Battery/dp/B00GLO5SMY/ref=sr_1_2?ie=UTF8&qid=1486959207&sr=8-2&keywords=robot+chassis
 - Adafruit Servo Hat (for arms)
 - HC-SR04 sonars
-- Any stepper motor arm - for example: SainSmart DIY Control Palletizing Robot Arm for the arm (https://www.amazon.com/dp/B0179BTLZ2/ref=twister_B00YTW763Y?_encoding=UTF8&psc=1)
 - Raspberry PI compatible camera - for example: https://www.amazon.com/Raspberry-Pi-Camera-Module-Megapixel/dp/B01ER2SKFS/ref=sr_1_1?s=electronics&ie=UTF8&qid=1486960149&sr=1-1&keywords=raspberry+pi+camera
 - for Whiskers to work you have to connect two bump sensors like this guy made http://www.instructables.com/id/Cheap%2C-Durable%2C-Very-Effective-Robot-Bump-Sensor/#ampshare=http://www.instructables.com/id/Cheap%252C-Durable%252C-Very-Effective-Robot-Bump-Sensor/ and connect via a safe circuit from your 3.3V outputs like this guy shows.  http://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/robot/buttons_and_switches/ Do not miss out the resistors or you may fry your pi.
+- LSM303DLHC if you want positioning and acceleration data
+- BME680 if you want pressure and temp senses too.
 Order the stuff well ahead of time, that way you can use the cheaper and slower vendors.  Adafruit is hard to get in the UK quickly at a reasonable price but you can find it.
 
 To get started, you should be able to make the robot work without the arm, whiskers, sonar and servo hat.
@@ -118,7 +119,7 @@ cd Adafruit-Motor-HAT-Python-Library
 sudo apt-get install python-dev
 sudo python setup.py install
 cd ~/Roland_Robot
-easy_install pykalman
+sudo easy_install pykalman
 sudo pip install -r requirements.txt
 sudo apt-get install flite
 sudo apt-get install python-paramiko
@@ -196,76 +197,32 @@ Now a stream of images from the camera should be constantly updating the file at
 
 #### tensorflow
 
-There is a great project at https://github.com/samjabrahams/tensorflow-on-raspberry-pi that gives instructions on installing tensorflow on the Raspberry PI.  Recently it's gotten much easier, just do
-
 ```
-wget https://github.com/samjabrahams/tensorflow-on-raspberry-pi/releases/download/v0.11.0/tensorflow-0.11.0-cp27-none-linux_armv7l.whl
-sudo pip install tensorflow-0.11.0-cp27-none-linux_armv7l.whl
+pip install tensorflow
 ```
 
 Last command took an age... run it and go out or run it just before bed so it can go overnight
  
-It also doesn’t install tensorflow, just the python interfaces or at least didn’t get a proper tensorflow directory with any of the stuff we need….
+pull tensorflow to get the examples etc
 
 ``` 
 cd ~
 git clone https://github.com/tensorflow/tensorflow.git
 cd tensorflow
-tensorflow/contrib/makefile/download_dependencies.sh
-sudo apt-get install -y autoconf automake libtool gcc-4.8 g++-4.8
-cd tensorflow/contrib/makefile/downloads/protobuf/
-./autogen.sh
-./configure
-make
-sudo make install
-sudo ldconfig  # refresh shared library cache
-cd ../../../../..
-export HOST_NSYNC_LIB=`tensorflow/contrib/makefile/compile_nsync.sh`
-export TARGET_NSYNC_LIB="$HOST_NSYNC_LIB"
-make -f tensorflow/contrib/makefile/Makefile HOST_OS=PI TARGET=PI \
- OPTFLAGS="-Os -mfpu=neon-vfpv4 -funsafe-math-optimizations -ftree-vectorize" CXX=g++-4.8
 
-```
-
-More detail on the up to date instructions can be seen here:
-- https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/makefile#raspberry-pi
-- https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/pi_examples
-
-Install and compile tensorflow correctly for the Pi.  Takes around 3-8hrs to do so kick off the make commands and find something else to do for a few hours.  The final make command is best run overnight.
- 
-
+``` 
 Now create a symbolic link for the labels in your tensorflow directory to the pi_examples label_image directory
 
 ```
 pi@raspberrypi:~/tensorflow $ ln -s tensorflow/contrib/pi_examples/label_image/gen/bin/label_image label_image
 ```
+Now run this and your robot should start to explore and log its environment.
 
-
-Next start a tensorflow service that loads up an inception model and does object recognition the the inception model
-
-```
-sudo cp services/inception.service /etc/systemd/system/inception.service
-sudo systemctl daemon-reload
-sudo systemctl enable inception
-sudo systemctl start inception
-```
-
-
-Once everything is installed and ready you can get the robot running, doing self driving and appreciating its environment using:
 ```
 sh startRobot.sh
 ```
 
-
-To do the control and access it via web interface
-
-```
-sudo sh server.sh &
-python inception_server.py &
-```
 Then on your pi:
-- port 9999 for inception  http://yourPiAddress:9999
-- port 8000 for drive http://yourPiAddress:8000
 - /cam.jpg to see what it sees  http://yourPiAddress/cam.jpg
 
  
